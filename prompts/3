@@ -1,0 +1,59 @@
+ prompt = f"""
+Haal alle citaten uit de volgende Nederlandstalige nieuwsartikelteksten.
+
+Geef een JSON-object met één veld "quotes", dat een lijst bevat van citaten.
+Elk citaat is een JSON-object met de volgende velden:
+
+- "source": de naam van de spreker of bron (persoon of organisatie),
+- "cue": het signaalwoord dat aanduidt dat iemand iets zegt (zoals 'zei', 'aldus', 'verklaarde'),
+- "content": de geciteerde tekst, tussen aanhalingstekens,
+- "type": het type citaat, op basis van onderstaande definities
+
+Gebruik uitsluitend citaten met expliciete bronvermelding. Negeer ironische of hypothetische aanhalingstekens, slogans, vage bronnen of citaten zonder duidelijke cue of spreker. Haal uitsluitend citaten op die letterlijk en volledig voorkomen in de brontekst. Verzamel geen eigen interpretaties, aanvullingen of ingekorte weergaves.
+
+
+### DEFINITIES VAN TYPE QUOTES:
+
+1. **direct**
+- De cue (bijv. 'zei', 'stelde', 'verklaarde') introduceert een letterlijk citaat.
+- Meestal volgt er een dubbele punt vóór het citaat.
+- Voorbeeld:
+  _Vooruitblikkend stelde Rutte: “Een stem op de PVV is een verloren stem.”_
+
+2. **sentence_end**
+- De quote staat aan het begin van de zin, gevolgd door de cue en bron.
+- De cue kan binnen of buiten de aanhalingstekens vallen, afhankelijk van stijl.
+- Voorbeeld:
+  _“Ongekende nonsens,” zegt Theo Weterings._
+
+3. **paraphrase**
+- De uitspraak wordt samengevat of gedeeltelijk overgenomen.
+- Kan tussen aanhalingstekens staan, maar is geen letterlijk citaat.
+- Voorbeeld:
+  _Van Bommel zei dat PSV een “kapitale blunder” had begaan._
+
+4. **indirect**
+- Geen aanhalingstekens. De inhoud is samengevat of omschreven.
+- Meestal voorafgegaan door een beschrijvende introductie.
+- Voorbeeld:
+  _Hij veroordeelde het avontuur: “Alsof Nederland een speeltuin is.”_
+
+5. **split**
+- Het citaat wordt onderbroken door de cue of extra uitleg.
+- Bestaat uit twee tekstsegmenten.
+- Voorbeeld:
+  _“We gaan investeren,” aldus Kist, “en dat is nodig.”_
+
+Text:
+{text}
+"""
+
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Je bent een assistent voor het extraheren van citaten die gestructureerde gegevens retourneert. Haal uitsluitend citaten op die letterlijk en volledig voorkomen in de brontekst. Analyseer de tekst van begin tot eind en retourneer in die volgorde de output. Verzamel geen eigen interpretaties, aanvullingen of ingekorte weergaves. Retourneer altijd slechts één geldig JSON-object met een 'quotes'-lijst. Elk citaat bevat de bron, cue, inhoud en type. Voeg geen uitleg of commentaar toe."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0
+            )
