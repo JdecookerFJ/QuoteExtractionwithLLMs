@@ -1,0 +1,25 @@
+Haal alle citaten uit de volgende Nederlandstalige nieuwsartikelteksten.
+
+Geef een JSON-object met één veld "quotes", dat een lijst bevat van citaten.
+Elk citaat is een JSON-object met de volgende velden:
+
+- "source": de naam van de spreker of bron (persoon of organisatie),
+- "cue": het signaalwoord dat aanduidt dat iemand iets zegt (zoals 'zei', 'aldus', 'verklaarde'),
+- "content": de geciteerde tekst, tussen aanhalingstekens,
+- "type": het type citaat op basis van structuur: direct, indirect, paraphrase, sentence_end of split
+
+Gebruik uitsluitend citaten tussen aanhalingstekens. Negeer ironische of hypothetische aanhalingstekens, slogans, vage bronnen of citaten zonder duidelijke bron.
+
+Text:
+{text}
+"""
+
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Je bent een assistent voor het extraheren van citaten die gestructureerde gegevens retourneert. Retourneer altijd slechts één geldig JSON-object met een 'quotes'-lijst. Elk citaat bevat de bron, cue, inhoud en type. Voeg geen uitleg of commentaar toe."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0
+            )
