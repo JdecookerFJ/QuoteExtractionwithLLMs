@@ -1,0 +1,15 @@
+class QuoteType(str, Enum):
+    DIRECT = "direct"
+    SENTENCE_END = "sentence_end"
+    PARAPHRASE = "paraphrase"
+    INDIRECT = "indirect"
+    SPLIT = "split"
+
+class Quote(BaseModel):
+    content: str = Field(..., description="Quoted text")
+    source: Optional[str] = Field(None, description="Name of the speaker")
+    type: QuoteType = Field(..., description="Type of the quote (e.g. direct, indirect, paraphrase, indirect or split)")
+
+class ArticleWithQuotes(BaseModel):
+    title: Optional[str] = Field(None, description="Optional title of the article")
+    quotes: List[Quote] = Field(..., description="All quotes extracted from the article")
