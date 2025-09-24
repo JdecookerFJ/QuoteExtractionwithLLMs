@@ -1,0 +1,6 @@
+prompt = f"""
+Extract structured quotes from the following text. For each quote, return a JSON list of objects with fields: source, cue, content, and type (direct, sentence_end, paraphrase, indirect, split).
+
+Text:
+{text}
+"""
