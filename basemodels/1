@@ -1,0 +1,16 @@
+class QuoteType(str, Enum):
+    DIRECT = "direct"
+    SENTENCE_EIND = "sentence_eind"
+    PARAFRASE = "parafrase"
+    INDIRECT = "indirect"
+    SPLIT = "split"
+
+class Quote(BaseModel):
+content: str = Field(..., description="De geciteerde tekst, tussen aanhalingstekens.")
+source: Optional[str] = Field(None, description="De naam van de spreker of bron (persoon of organisatie).")
+cue: Optional[str] = Field(None, description="Signaalwoord dat de uitspraak aanduidt (zoals 'zei', 'aldus', 'verklaarde', 'gaf aan', 'vertelt', 'zegt', 'stelt', 'vertelt')")
+type: QuoteType = Field(..., description="Het type citaat op basis van structuur: direct, indirect, paraphrase, sentence end of split.")
+
+class ArticleWithQuotes(BaseModel):
+    title: Optional[str] = Field(None, description="Optionele titel van het artikel")
+    quotes: List[Quote] = Field(..., description="Alle citaten uit het artikel")
